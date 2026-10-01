@@ -1,0 +1,11 @@
+# Render.com deployment configuration
+services:
+  - type: web
+    name: hms_backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: JWT_SECRET
+        sync: false
+      - key: GOOGLE_SHEET_ID
+        sync: false

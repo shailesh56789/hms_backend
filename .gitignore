@@ -1,0 +1,27 @@
+# HMS Backend - .gitignore
+
+# Google credentials (NEVER push this to GitHub!)
+config/google-credentials.json
+*.json.key
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Composer vendor folder
+vendor/
+composer.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+logs/
