@@ -56,14 +56,24 @@ class SheetsDB
 
     private function getAccessToken(): string
     {
-        $credFile = GOOGLE_SERVICE_ACCOUNT_JSON;
-        if (!file_exists($credFile)) {
-            throw new RuntimeException(
-                "Google credentials file not found: $credFile\n" .
-                "Please download your Service Account JSON key and place it at config/google-credentials.json"
-            );
+        // Try environment variable first (for Render / production)
+        $envJson = getenv('GOOGLE_CREDENTIALS_JSON');
+        if ($envJson && !empty($envJson)) {
+            $creds = json_decode($envJson, true);
+            if (!$creds) {
+                throw new RuntimeException("GOOGLE_CREDENTIALS_JSON env var contains invalid JSON");
+            }
+        } else {
+            // Fallback to file (for local XAMPP development)
+            $credFile = GOOGLE_SERVICE_ACCOUNT_JSON;
+            if (!file_exists($credFile)) {
+                throw new RuntimeException(
+                    "Google credentials file not found: $credFile\n" .
+                    "Please set GOOGLE_CREDENTIALS_JSON env variable or place the JSON key at config/google-credentials.json"
+                );
+            }
+            $creds = json_decode(file_get_contents($credFile), true);
         }
-        $creds = json_decode(file_get_contents($credFile), true);
 
         $now = time();
         $payload = [
